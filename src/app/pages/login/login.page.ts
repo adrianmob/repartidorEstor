@@ -23,8 +23,10 @@ export class LoginPage {
     //cuando se da click en iniciar
   Submit_Form() {
     if (this.usr.email != "" && this.usr.contrasena != "") {
+      console.log(this.usr); 
       this.userService.getLoginResponse(this.usr).subscribe((response: any) => {
-        if (response.status == "success" && response.user.length > 0) {
+        console.log(response.success);
+        if (response.success  && response.user.length > 0) {
           this.storage.set('user_Data', response.user[0]).then((val) => {
             this.NavCtrl.navigateForward('home');
           });

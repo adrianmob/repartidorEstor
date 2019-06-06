@@ -6,6 +6,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { UserService } from './services/user/user.service';
 import { FuncionesGlobalesService } from './services/global/funciones-globales.service';
 import { user } from 'src/interfaces/user.interface';
+import { DomSanitizer } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-root',
@@ -15,8 +17,8 @@ export class AppComponent {
 
   userData: user = new user();
   notifications: number = 1;
-  cash: number = 1540.32;
-  foto: string;
+  cash: number = 0;
+  foto: any;
   option: string = "menu";
 
   constructor(
@@ -28,7 +30,8 @@ export class AppComponent {
     private navCtrl: NavController,
     private userService: UserService,
     private globalFunctions: FuncionesGlobalesService,
-    public events: Events
+    public events: Events,
+    private _sanitizer: DomSanitizer
   ) {
     this.initializeApp();
     //deshabilita menú lateral
@@ -57,8 +60,10 @@ export class AppComponent {
   //chaca datos de inicio de sesión anteriores y si hay redirige a home(mapa) 
   comprobarLogin() {
     this.storage.get('user_Data').then((val) => {
+      console.log(val);
       if (val != undefined) {
         this.userData = val;
+        this.foto = this._sanitizer.bypassSecurityTrustUrl("data:Image/*;base64,"+this.userData.fotografia);
         this.navCtrl.navigateForward('home');
       }
     });
@@ -73,13 +78,19 @@ export class AppComponent {
   verPerfil() {
     this.navCtrl.navigateForward('updateprofile');
     this.menu.close('menu');
-    this.menu.enable(false, 'menu');
   }
 
   // habilita una variable que muestra u oculta cierto html
   pedidosEnEspera() {
     //llamar a bd para traer pedidos en espera
     this.option = "pedidosEnEspera";
+  }
+
+  salir(){
+    this.storage.clear().then(()=>{
+      this.menu.close('menu');
+      this.navCtrl.navigateRoot('session');
+    });
   }
 
 }

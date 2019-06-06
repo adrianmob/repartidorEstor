@@ -6,13 +6,15 @@
   </ion-button>  
 
   <div id="icon">
-    <img src="assets/menu.png" style="width:8vw; height: 8vw;" (click)="toggleSideMenu()" />
+      <ion-button  mode="md" class="menu" (click)="toggleSideMenu()" color="light">
+          <ion-icon class="center-icono" slot="icon-only" name="menu"></ion-icon>
+        </ion-button>  
     <ion-badge *ngIf="notifications>0" color="danger"
       style="position: absolute; top:-2vw; right: -4vw; --padding-start:5px; --padding-end:5px;">{{notifications}}
     </ion-badge>
   </div>
   <div id="logo" (click)="newPedido()">
-    <img src="assets/ElEstorLogoCuadroyAza.png" style="width: 30vw; height: 20vw;">
+    <img src="assets/ElEstorLogoCuadroyAza.png" style="width: 45vw;">
   </div>
   <div id="btnGroup"
     style="background-color:#fff; margin-top:3vw; border:1px solid #ccc; border-radius:6px; margin-right:3vw; width:9vw; height:18vw;">
@@ -27,10 +29,14 @@
 </ion-content>
 
 <div class="footer">
+  <h2 *ngIf="estado==1 && ruta==false" class="negocio">Toks</h2>
+  <p class="negDir" *ngIf="estado==1 && ruta==false">Blvd. Villas de Irapuato #1443, Int. A-31</p>
+  <h2 *ngIf="estado==2" class="negocio">Jesus Adrian Quiroz Palacios</h2>
+  <p class="negDir" *ngIf="estado==2">Paseo de la Fundacion 3314, Villas de Irapuato</p>   
   <ion-button (click)="directionCliente()" *ngIf="ruta" class="botonRecibi" shape="round">Recibi el pedido</ion-button>
   <ion-button (click)="finalizarPedido()" *ngIf="rutaCliente" class="botonRecibi" shape="round">Deje el pedido</ion-button>
-  <ion-button color="ligth" mode="md" class="info">
-    <ion-icon mode="ios" slot="icon-only" name="list"></ion-icon>
+  <ion-button color="ligth" mode="md" class="info" (click)="infoPedido()">
+    <ion-icon class="icono-info" mode="ios" slot="icon-only" name="list"></ion-icon>
   </ion-button>  
 
 </div>

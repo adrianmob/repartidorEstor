@@ -7,15 +7,19 @@ import { RouterModule } from '@angular/router';
 import { HomePage } from './home.page';
 import { AlertaPage } from '../alerta/alerta.page';
 import { AlertaPageModule } from '../alerta/alerta.module';
+import { InfoPedidoPage } from '../info-pedido/info-pedido.page';
+import { InfoPedidoPageModule } from '../info-pedido/info-pedido.module';
 
 @NgModule({
   entryComponents: [
+    InfoPedidoPage,
     AlertaPage
   ],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    InfoPedidoPageModule,
     RouterModule.forChild([
       {
         path: '',

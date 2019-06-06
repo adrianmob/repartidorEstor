@@ -7,7 +7,7 @@ import { user } from 'src/interfaces/user.interface';
 })
 export class UserService {
 
-  URL: string = "https://localhost:5001/api/";
+  URL: string = "http://localhost:8888/repartidorAPI/";
 
   constructor(private http: HttpClient) { }
 
@@ -15,7 +15,7 @@ export class UserService {
   getLoginResponse(user: user) {
     let params = JSON.stringify(user);
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.post(this.URL + 'user/login', params, { headers: headers });
+    return this.http.post(this.URL + 'ingresar.php', params, { headers: headers });
   }
 
   //crea nuevo usuario

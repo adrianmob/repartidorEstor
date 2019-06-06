@@ -14,6 +14,7 @@ import { userInfo } from 'os';
 import { order } from '../../../interfaces/order.interface';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AlertaPage } from '../alerta/alerta.page';
+import { InfoPedidoPage } from '../info-pedido/info-pedido.page';
 
 
 declare var google;
@@ -47,6 +48,7 @@ export class HomePage implements OnInit {
   ruta:boolean = false;
   rumboCliente:boolean = false;
   rutaCliente:boolean = false; 
+  estado:number = 0;
 
   constructor(private storage: Storage,
     private afdb: AngularFireDatabase,
@@ -58,22 +60,35 @@ export class HomePage implements OnInit {
     private userService: UserService,
     public events: Events,
     public alertController: AlertController,
-    private modalCtrl: ModalController) {
+    private modalCtrl: ModalController,
+    public modalController: ModalController) {
     this.menu.enable(true, 'menu');
   }
 
   //evento que ocurre cuando se hace click en boton ayuda
-  Help() {
-    this.Show_Help_Alert();
-  }
+  // Help() {
+  //   this.Show_Help_Alert();
+  // }
 
   finalizarPedido(){
     console.log("finalizar pedido");
-    this.directionsDisplay.setMap(null);
     this.rumboCliente = false;
     this.rutaCliente = false;
+    this.estado = 0;
     this.ruta = false;
+    this.directionsDisplay.setMap(null);
   }
+
+  async infoPedido(){
+      const modal = await this.modalController.create({
+        component: InfoPedidoPage,
+        componentProps: this.pedido 
+      });
+      
+      modal.present();
+    
+  }
+  
 
   async newPedido(){
     const modal =  await this.modalCtrl.create({
@@ -96,6 +111,8 @@ export class HomePage implements OnInit {
       this.repartidoresUnsubscribe();
 
       this.pedidosSuscribe.unsubscribe();
+
+      this.estado = 1;
 
       this.direction();
 
@@ -129,6 +146,7 @@ export class HomePage implements OnInit {
 
   directionCliente(){
     this.rumboCliente = true;
+    this.estado = 2;
     this.ruta = false;
     let directionsService = new google.maps.DirectionsService;
     directionsService.route({
@@ -146,85 +164,85 @@ export class HomePage implements OnInit {
 
 
   //alert que se muestra al usuario que dió click en ayuda para confirmar que realmente la necesite
-  async Show_Help_Alert() {
-    const alert = await this.alertController.create({
-      header: "¿Tienes algun Problema?",
-      backdropDismiss: false,
-      message: "Si deseas enviar tú ubicación para recibir ayuda de otro repartidor haz clic en continuar.",
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary'
-        },
-        {
-          text: 'Continuar',
-          cssClass: 'primary',
-          handler: () => {
-            this.waitDeliverResponse();
-            //para que no puda hacer click de nuevo en ayuda
-            this.helpDisabled = true;
-          }
-        }
-      ]
-    });
-    await alert.present();
-  }
+  // async Show_Help_Alert() {
+  //   const alert = await this.alertController.create({
+  //     header: "¿Tienes algun Problema?",
+  //     backdropDismiss: false,
+  //     message: "Si deseas enviar tú ubicación para recibir ayuda de otro repartidor haz clic en continuar.",
+  //     buttons: [
+  //       {
+  //         text: 'Cancel',
+  //         role: 'cancel',
+  //         cssClass: 'secondary'
+  //       },
+  //       {
+  //         text: 'Continuar',
+  //         cssClass: 'primary',
+  //         handler: () => {
+  //           this.waitDeliverResponse();
+  //           //para que no puda hacer click de nuevo en ayuda
+  //           this.helpDisabled = true;
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   await alert.present();
+  // }
 
   //establece que necesita ayuda en la BD y muestra alert de que espere por alguien que confirme que atenderá su alerta
   // y se suscribe a la espera de que alguien confirme
   //cuando alguien confirma cierra el ultimo alert de espera, detiene conexiones, muestra alert de que tal usuario atendió
   //su alerta y traza ruta entre el y el repartidor que lo atendió y se suscribe a cambios de posicion del repartidor que atenió
   //cuando el repartidor esta a menos de 30 mts de llegar entonces manda alerta de que ya anda por ahí :v 
-  async waitDeliverResponse() {
-    this.userService.setAlert(this.id, 1).subscribe(async (response: any) => {
-      if (response.status == "success") {
-        this.Show_Wait_Alert();
-        this.signalRService.startConnectionDeliverAlert();
-        this.signalRService.getDeliverResponse();
-        this.signalRService.getDeliverResponseSubscribe(this.id).subscribe(async (resp: any) => {
-          if (resp.message == "Request Completed") {
-            this.signalRService.DeliverResponseDataChange.subscribe(async (value: any) => {
-              if (value.length > 0) {
-                this.alertOfProblem.dismiss();
-                this.signalRService.stopConnectionDelivers();
-                //this.signalRService.stopConnectionOrders();
-                this.signalRService.stopConnectionAlertAcepted();
-                this.deleteDelivers();
-                this.Show_Confirm_Alert(value[0].nombre + ' ' + value[0].apellidoPaterno + ' se dirige a tu ubicación.');
-                var directionsService = new google.maps.DirectionsService;
-                var directionsDisplay = new google.maps.DirectionsRenderer;
-                directionsDisplay.setMap(this.mapa);
-                directionsDisplay.setOptions({ suppressMarkers: true, preserveViewport: true });
-                var cont = 0;
-                this.signalRService.startConnectionFollowDeliver();
-                this.signalRService.FollowDeliver();
-                this.signalRService.FollowDeliverResponseSubscribe(value[0].id_repartidor).subscribe((res: any) => {
-                  this.signalRService.FollowDeliverDataChange.subscribe(async (val: any) => {
-                    this.establecerRuta({ lat: val[0].latitud, lng: val[0].longitud }, this.currentPosition, directionsService, directionsDisplay);
-                    this.HelpMarker = this.setMarker(val[0].latitud, val[0].longitud, this.HelpMarker);
-                    if (cont == 0) {
-                      this.mapa.setCenter({ lat: val[0].latitud, lng: val[0].longitud });
-                      this.mapa.setZoom(16);
-                    }
-                    cont++;
-                    var service = new google.maps.DistanceMatrixService;
-                    var distance = await this.getDistance( { lat: val[0].latitud, lng: val[0].longitud }, this.currentPosition);
-                    if (distance < 30) {
-                      //this.signalRService.FollowDeliverDataChange.unsubscribe();
-                      this.signalRService.stopConnectionFollowDeliver();
-                      this.Show_New_Deliver_Arrived(value[0], directionsDisplay);
-                    }
-                  });
-                });
+  // async waitDeliverResponse() {
+  //   this.userService.setAlert(this.id, 1).subscribe(async (response: any) => {
+  //     if (response.status == "success") {
+  //       this.Show_Wait_Alert();
+  //       this.signalRService.startConnectionDeliverAlert();
+  //       this.signalRService.getDeliverResponse();
+  //       this.signalRService.getDeliverResponseSubscribe(this.id).subscribe(async (resp: any) => {
+  //         if (resp.message == "Request Completed") {
+  //           this.signalRService.DeliverResponseDataChange.subscribe(async (value: any) => {
+  //             if (value.length > 0) {
+  //               this.alertOfProblem.dismiss();
+  //               this.signalRService.stopConnectionDelivers();
+  //               //this.signalRService.stopConnectionOrders();
+  //               this.signalRService.stopConnectionAlertAcepted();
+  //               this.deleteDelivers();
+  //               this.Show_Confirm_Alert(value[0].nombre + ' ' + value[0].apellidoPaterno + ' se dirige a tu ubicación.');
+  //               var directionsService = new google.maps.DirectionsService;
+  //               var directionsDisplay = new google.maps.DirectionsRenderer;
+  //               directionsDisplay.setMap(this.mapa);
+  //               directionsDisplay.setOptions({ suppressMarkers: true, preserveViewport: true });
+  //               var cont = 0;
+  //               this.signalRService.startConnectionFollowDeliver();
+  //               this.signalRService.FollowDeliver();
+  //               this.signalRService.FollowDeliverResponseSubscribe(value[0].id_repartidor).subscribe((res: any) => {
+  //                 this.signalRService.FollowDeliverDataChange.subscribe(async (val: any) => {
+  //                   this.establecerRuta({ lat: val[0].latitud, lng: val[0].longitud }, this.currentPosition, directionsService, directionsDisplay);
+  //                   this.HelpMarker = this.setMarker(val[0].latitud, val[0].longitud, this.HelpMarker);
+  //                   if (cont == 0) {
+  //                     this.mapa.setCenter({ lat: val[0].latitud, lng: val[0].longitud });
+  //                     this.mapa.setZoom(16);
+  //                   }
+  //                   cont++;
+  //                   var service = new google.maps.DistanceMatrixService;
+  //                   var distance = await this.getDistance( { lat: val[0].latitud, lng: val[0].longitud }, this.currentPosition);
+  //                   if (distance < 30) {
+  //                     //this.signalRService.FollowDeliverDataChange.unsubscribe();
+  //                     this.signalRService.stopConnectionFollowDeliver();
+  //                     this.Show_New_Deliver_Arrived(value[0], directionsDisplay);
+  //                   }
+  //                 });
+  //               });
 
-              }
-            });
-          }
-        });
-      }
-    });
-  }
+  //             }
+  //           });
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
 
   //elimina los repartidores disponibles (estatus 3) que estaban como marcadores en el mapa
   deleteDelivers() {
@@ -290,40 +308,40 @@ export class HomePage implements OnInit {
 
   //se suscribe a la espera de que alguien mande una alerta y si esa alerta no tiene asociado un repartidor que la atienda
   //y el usuario actual no la rechazo anteriormente entonces manda alerta
-  hearForAlert() {
-    this.signalRService.startConnectionListeningForAlert();
-    this.signalRService.listeningForAlert();
-    this.signalRService.listenForAlert().subscribe((response: any) => {
-      this.signalRService.deliversDataChange.subscribe((value: any) => {
+  // hearForAlert() {
+  //   this.signalRService.startConnectionListeningForAlert();
+  //   this.signalRService.listeningForAlert();
+  //   this.signalRService.listenForAlert().subscribe((response: any) => {
+  //     this.signalRService.deliversDataChange.subscribe((value: any) => {
 
-        if (value != null) {
-          for (var i = 0; i < value.length; i++) {
-            if (value[i].alerta && value[i].fk_Rep_At_Alerta == null && !this.rechazoAlerta) {
-              this.signalRService.stopConnectionListenDelivers();
-              this.existeAlerta(value, value[i]);
-            }
-          }
-        }
+  //       if (value != null) {
+  //         for (var i = 0; i < value.length; i++) {
+  //           if (value[i].alerta && value[i].fk_Rep_At_Alerta == null && !this.rechazoAlerta) {
+  //             this.signalRService.stopConnectionListenDelivers();
+  //             this.existeAlerta(value, value[i]);
+  //           }
+  //         }
+  //       }
 
-      });
-    });
-  }
+  //     });
+  //   });
+  // }
 
   //itera cada usuario que este diaponible y le manda la alerta de que alguien necesita ayuda en caso de existir este.
-  async existeAlerta(arr, alerta) {
-    var service = new google.maps.DistanceMatrixService;
-    for (var i = 0; i < arr.length; i++) {
-      if (arr[i].estatus == 3) {
-        arr[i].distance = await this.getDistance(service, this.currentPosition, { lat: arr[i].latitud, lng: arr[i].longitud });
-      }
-    }
-    arr = this.menorDistancia(arr);
-    for (var h = 0; h < arr.length; h++) {
-      if (h < 5 && arr[h].estatus == 3 && this.id != alerta.id_repartidor && this.id == arr[h].id_repartidor) {
-        this.showEmergencyAlert(alerta.nombre + ' ' + alerta.apellidoPaterno, alerta);
-      }
-    }
-  }
+  // async existeAlerta(arr, alerta) {
+  //   var service = new google.maps.DistanceMatrixService;
+  //   for (var i = 0; i < arr.length; i++) {
+  //     if (arr[i].estatus == 3) {
+  //       arr[i].distance = await this.getDistance(service, this.currentPosition, { lat: arr[i].latitud, lng: arr[i].longitud });
+  //     }
+  //   }
+  //   arr = this.menorDistancia(arr);
+  //   for (var h = 0; h < arr.length; h++) {
+  //     if (h < 5 && arr[h].estatus == 3 && this.id != alerta.id_repartidor && this.id == arr[h].id_repartidor) {
+  //       this.showEmergencyAlert(alerta.nombre + ' ' + alerta.apellidoPaterno, alerta);
+  //     }
+  //   }
+  // }
 
   //recive un origen y un destino y dos objetos de google donde traza la ruta sobre el mapa de acuerdo a ese origen y fin 
   establecerRuta(origen, destino, directionsService, directionsDisplay) {
@@ -346,72 +364,72 @@ export class HomePage implements OnInit {
   //deja de escuchar posicion de repartidores, deja de escuchar alertas, quita repartidores del mapa
   //traza ruta entre el y el usuario destino y cuando está a menos de 30 metros manda alerta y se suscribe de nuevo a esperar alertas y a ver 
   //posicion de repartidores
-  async showEmergencyAlert(name, userAlert) {
-    const al = await this.alertController.create({
-      header: "ALERTA",
-      backdropDismiss: false,
-      message: "El repartidor " + name + " tuvo un problema, ¿Deseas ayudarlo?",
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-            this.rechazoAlerta = true;
-            this.hearForAlert();
-          }
-        },
-        {
-          text: 'Ayudar',
-          cssClass: 'primary',
-          handler: () => {
-            this.userService.setDeliverAtAlert(userAlert.id_repartidor, this.id).subscribe((response: any) => {
-              if (response.status = "success") {
-                this.helpDisabled = true;
-                this.signalRService.stopConnectionDelivers();
-                this.deleteDelivers();
-                var directionsService = new google.maps.DirectionsService;
-                var directionsDisplay = new google.maps.DirectionsRenderer;
-                directionsDisplay.setMap(this.mapa);
-                directionsDisplay.setOptions({ suppressMarkers: true, preserveViewport: true });
-                let cont = 0;
-                this.establecerRuta(this.currentPosition, { lat: userAlert.latitud, lng: userAlert.longitud }, directionsService, directionsDisplay);
-                this.HelpMarker = this.setMarker(userAlert.latitud, userAlert.longitud, this.HelpMarker);
-                this.mapa.setZoom(16);
-                this.mapa.setCenter(this.currentPosition);
-                this.currentPosition2.subscribe(async (data) => {
-                  this.establecerRuta(this.currentPosition, { lat: userAlert.latitud, lng: userAlert.longitud }, directionsService, directionsDisplay);
-                  var service = new google.maps.DistanceMatrixService;
-                  var distance = await this.getDistance(this.currentPosition, { lat: userAlert.latitud, lng: userAlert.longitud });
-                  if (distance < 30) {
-                    //this.currentPosition2.unsubscribe();
-                    directionsDisplay.setMap(null);
-                    this.HelpMarker.setMap(null);
-                    this.helpDisabled = false;
-                    this.HelpMarker = undefined;
-                    this.mapa.setCenter(this.currentPosition);
-                    this.mapa.setZoom(14);
-                    if (userAlert.estatus > 3) {
-                      this.globalFunctions.Show_Ok_Alert('Has llegado', 'El repartidor al que has ayudado tenía pedidos pendientes, ahora es tu turno continuar con ellos.');
-                    }
-                    else {
-                      this.getDeliversPosition();
-                      this.globalFunctions.Show_Ok_Alert('Has llegado', 'Sabemos que has llegado con el repartidor que solicitó ayuda.');
-                    }
-                  }
-                });
-              }
-              else {
-                this.globalFunctions.Show_Ok_Alert('Hubo un problema', 'Lo sentimos. alguien más ha aceptado acudir a la ayuda antes que tu');
-                this.hearForAlert();
-              }
-            });
-          }
-        }
-      ]
-    });
-    await al.present();
-  }
+  // async showEmergencyAlert(name, userAlert) {
+  //   const al = await this.alertController.create({
+  //     header: "ALERTA",
+  //     backdropDismiss: false,
+  //     message: "El repartidor " + name + " tuvo un problema, ¿Deseas ayudarlo?",
+  //     buttons: [
+  //       {
+  //         text: 'Cancelar',
+  //         role: 'cancel',
+  //         cssClass: 'secondary',
+  //         handler: () => {
+  //           this.rechazoAlerta = true;
+  //           this.hearForAlert();
+  //         }
+  //       },
+  //       {
+  //         text: 'Ayudar',
+  //         cssClass: 'primary',
+  //         handler: () => {
+  //           this.userService.setDeliverAtAlert(userAlert.id_repartidor, this.id).subscribe((response: any) => {
+  //             if (response.status = "success") {
+  //               this.helpDisabled = true;
+  //               this.signalRService.stopConnectionDelivers();
+  //               this.deleteDelivers();
+  //               var directionsService = new google.maps.DirectionsService;
+  //               var directionsDisplay = new google.maps.DirectionsRenderer;
+  //               directionsDisplay.setMap(this.mapa);
+  //               directionsDisplay.setOptions({ suppressMarkers: true, preserveViewport: true });
+  //               let cont = 0;
+  //               this.establecerRuta(this.currentPosition, { lat: userAlert.latitud, lng: userAlert.longitud }, directionsService, directionsDisplay);
+  //               this.HelpMarker = this.setMarker(userAlert.latitud, userAlert.longitud, this.HelpMarker);
+  //               this.mapa.setZoom(16);
+  //               this.mapa.setCenter(this.currentPosition);
+  //               this.currentPosition2.subscribe(async (data) => {
+  //                 this.establecerRuta(this.currentPosition, { lat: userAlert.latitud, lng: userAlert.longitud }, directionsService, directionsDisplay);
+  //                 var service = new google.maps.DistanceMatrixService;
+  //                 var distance = await this.getDistance(this.currentPosition, { lat: userAlert.latitud, lng: userAlert.longitud });
+  //                 if (distance < 30) {
+  //                   //this.currentPosition2.unsubscribe();
+  //                   directionsDisplay.setMap(null);
+  //                   this.HelpMarker.setMap(null);
+  //                   this.helpDisabled = false;
+  //                   this.HelpMarker = undefined;
+  //                   this.mapa.setCenter(this.currentPosition);
+  //                   this.mapa.setZoom(14);
+  //                   if (userAlert.estatus > 3) {
+  //                     this.globalFunctions.Show_Ok_Alert('Has llegado', 'El repartidor al que has ayudado tenía pedidos pendientes, ahora es tu turno continuar con ellos.');
+  //                   }
+  //                   else {
+  //                     this.getDeliversPosition();
+  //                     this.globalFunctions.Show_Ok_Alert('Has llegado', 'Sabemos que has llegado con el repartidor que solicitó ayuda.');
+  //                   }
+  //                 }
+  //               });
+  //             }
+  //             else {
+  //               this.globalFunctions.Show_Ok_Alert('Hubo un problema', 'Lo sentimos. alguien más ha aceptado acudir a la ayuda antes que tu');
+  //               this.hearForAlert();
+  //             }
+  //           });
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   await al.present();
+  // }
 
   //burbuja pa' ordenar de menor distancia a mayor 
   menorDistancia(arr) {
@@ -462,26 +480,26 @@ export class HomePage implements OnInit {
 
   //obtiene una unica vez los establecimientos registrados en la base de datos, obtiene las coordenadas de cada uno de ellos
   // y los establece en el mapa
-  getEstablishments() {
-    var icon = {
-      url: "assets/markerStore.png",
-      scaledSize: new google.maps.Size(30, 50)
-    };
-    this.signalRService.getEstablishments().subscribe(async (response: any) => {
-      if (response.status = "success") {
-        var geocoder = new google.maps.Geocoder();
-        for (var i in response.establishments) {
-          var address = response.establishments[i].calle + ' ' + response.establishments[i].numeroExt + ' ' + response.establishments[i].colonia + ' ' + response.establishments[i].ciudad + ' ' + response.establishments[i].estado;
-          var coords = await this.geocodeAddress(geocoder, address);
-          let marker = new google.maps.Marker({
-            position: coords,
-            map: this.mapa,
-            icon: icon
-          });
-        }
-      }
-    });
-  }
+  // getEstablishments() {
+  //   var icon = {
+  //     url: "assets/markerStore.png",
+  //     scaledSize: new google.maps.Size(30, 50)
+  //   };
+  //   this.signalRService.getEstablishments().subscribe(async (response: any) => {
+  //     if (response.status = "success") {
+  //       var geocoder = new google.maps.Geocoder();
+  //       for (var i in response.establishments) {
+  //         var address = response.establishments[i].calle + ' ' + response.establishments[i].numeroExt + ' ' + response.establishments[i].colonia + ' ' + response.establishments[i].ciudad + ' ' + response.establishments[i].estado;
+  //         var coords = await this.geocodeAddress(geocoder, address);
+  //         let marker = new google.maps.Marker({
+  //           position: coords,
+  //           map: this.mapa,
+  //           icon: icon
+  //         });
+  //       }
+  //     }
+  //   });
+  // }
 
   //recive como parametro un objeto geocoder de google y una dirección en formato de texto ejemplo:"las carmelitas #39" y retorna 
   // esa misma ubicación en coordenadas
@@ -520,9 +538,10 @@ export class HomePage implements OnInit {
     this.storage.get('user_Data').then((val) => {
       // this.events.publish('emitUserData', val);
       this.id = val.id_repartidor;
-      this.loadMap();
-      this.repartidoresUbicacion();
-      this.listenPedidos();
+      setTimeout(()=>{
+        this.loadMap();
+      },0);
+      
       // this.hearForAlert();
     });
   }
@@ -580,10 +599,18 @@ export class HomePage implements OnInit {
 
     this.directionsDisplay.setMap(this.mapa);
 
+    google.maps.event.addListenerOnce(this.mapa, 'idle', ()=>{
+      console.log("hola");
+      this.repartidoresUbicacion();
+      setTimeout(()=>{
+        this.listenPedidos();
+
+      },1000);
+    });
+
     console.log(this.directionsDisplay);
 
     this.setMapControls();
-    this.getEstablishments();
     this.currentPosition.lat = position.lat;
     this.currentPosition.lng = position.lng;
     let watch = this.geolocation.watchPosition();

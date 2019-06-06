@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: 'session', loadChildren: './pages/session/session.module#SessionPageModule' },
   { path: 'register', loadChildren: './pages/register/register.module#RegisterPageModule' },
   { path: 'recoverpassword', loadChildren: './pages/recoverpassword/recoverpassword.module#RecoverpasswordPageModule' },
-  { path: 'updateprofile', loadChildren: './pages/updateprofile/updateprofile.module#UpdateprofilePageModule' }
+  { path: 'updateprofile', loadChildren: './pages/updateprofile/updateprofile.module#UpdateprofilePageModule' },
 ];
 
 @NgModule({

@@ -6,6 +6,7 @@ import { FuncionesGlobalesService } from 'src/app/services/global/funciones-glob
 import { user } from 'src/interfaces/user.interface';
 import { async } from '@angular/core/testing';
 import { ControlContainer } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-updateprofile',
@@ -16,7 +17,7 @@ export class UpdateprofilePage {
 
   confirmPassword: string = "";
   userData: user = new user();
-  foto: string;
+  foto: any;
 
   constructor(private NavCtrl: NavController,
     private ASController: ActionSheetController,
@@ -24,10 +25,11 @@ export class UpdateprofilePage {
     private menu: MenuController,
     private userService: UserService,
     private storage: Storage,
+    private _sanitizer: DomSanitizer,
     public events: Events) {
     this.storage.get('user_Data').then((val) => {
       this.userData = val;
-      this.foto = this.globalFunctions.convertToBase64(val.fotografia);
+      this.foto = this._sanitizer.bypassSecurityTrustUrl("data:Image/*;base64,"+this.userData.fotografia);
     });
   }
 

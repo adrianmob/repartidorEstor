@@ -3,13 +3,16 @@
     <ion-title>
       Ver Mi Perfil
     </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
   <ion-row margin-top justify-content-center>
     <ion-avatar class="avatar">
-      <img src="{{foto}}" class="back">
+      <img [src]="foto" class="back">
       <ion-icon (click)="Show_Action_Sheet()" class="circle-button front" name="add-circle"></ion-icon>
     </ion-avatar>
   </ion-row>

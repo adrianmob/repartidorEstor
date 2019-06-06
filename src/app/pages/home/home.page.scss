@@ -13,6 +13,13 @@
     pointer-events: none;
 }
 
+.menu{
+    --padding-start: 0;
+    --padding-end: 0;
+    width: 45px;
+    height: 45px;
+}
+
 .center{
     position: absolute;
     bottom: 10%;
@@ -23,8 +30,8 @@
 }
 
 .center-icono{
-    width: 45px;
-    height: 45px;
+    width: 35px;
+    height: 35px;
 }
 
 .footer{
@@ -33,18 +40,40 @@
     background-color: white;
     width: 100%;
     height: 10%;
-    padding: 20px;
+    padding: 10px 55px 0 10px;
 }
 
 .botonRecibi{
     margin: 0 auto;
     width: 80%;
+    display: block;
+    margin-top: 3%;
 }
 
 .info{
     margin: 0 auto;
     color: black;
     position: absolute;
-    right: 0;
+    right: 3%;
+    --box-shadow: none;
+    --padding-start: 0;
+    --padding-end: 0;
+    top: 26px;
 }
+
+.icono-info{
+    width: 38px;
+    height: 38px;
+}
+
+.negocio{
+    margin: 0;
+    text-align: center;
+}
+
+.dirNeg{
+    text-align: center;
+    margin: 10px 0;
+}
+
 
