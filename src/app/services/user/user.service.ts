@@ -7,7 +7,7 @@ import { user } from 'src/interfaces/user.interface';
 })
 export class UserService {
 
-  URL: string = "http://localhost:8888/repartidorAPI/";
+  URL: string = "http://ec2-13-57-42-231.us-west-1.compute.amazonaws.com/repartidorApi/";
 
   constructor(private http: HttpClient) { }
 
