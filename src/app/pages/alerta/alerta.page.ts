@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
+
 @Component({
   selector: 'app-alerta',
   templateUrl: './alerta.page.html',
@@ -32,5 +33,6 @@ export class AlertaPage implements OnInit {
   aceptar(){
     this.modalController.dismiss(true);
   }
+
 
 }

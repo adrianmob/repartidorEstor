@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user/user.service';
 import { user } from 'src/interfaces/user.interface';
-import { Storage } from '@ionic/storage';
 import { FuncionesGlobalesService } from 'src/app/services/global/funciones-globales.service';
 
 @Component({
@@ -15,9 +14,9 @@ export class LoginPage {
   cont: number = 0;
   usr = new user();
 
-  constructor(private NavCtrl: NavController,
+  constructor(
+    private NavCtrl: NavController,
     private userService: UserService,
-    private storage: Storage,
     private globalFunctions: FuncionesGlobalesService) { }
 
     //cuando se da click en iniciar
@@ -25,11 +24,13 @@ export class LoginPage {
     if (this.usr.email != "" && this.usr.contrasena != "") {
       console.log(this.usr); 
       this.userService.getLoginResponse(this.usr).subscribe((response: any) => {
-        console.log(response.success);
+        console.log(response.user[0]);
+        this.NavCtrl.navigateForward('home');
         if (response.success  && response.user.length > 0) {
-          this.storage.set('user_Data', response.user[0]).then((val) => {
-            this.NavCtrl.navigateForward('home');
-          });
+          localStorage.setItem("user_Data",JSON.stringify(response.user[0]));
+          // this.storage.set('user_Data', response.user[0]).then((val) => {
+          //   this.NavCtrl.navigateForward('home');
+          // });
         }
         else {
           this.cont++;

@@ -6,51 +6,53 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-//plugins
-import { Camera } from '@ionic-native/camera/ngx';
-import { ImagePicker } from '@ionic-native/image-picker/ngx';
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { HttpClientModule } from '@angular/common/http';
-import { IonicStorageModule } from '@ionic/storage';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+
+
+import { GoogleMaps } from '@ionic-native/google-maps';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule, AngularFireDatabase } from '@angular/fire/database';
 
-export const firebaseConfig = {
-  apiKey: "AIzaSyDZREXasNOfVA327IhwVQfxr6vg04llfZ0",
-  authDomain: "el-estore-4b7a9.firebaseapp.com",
-  databaseURL: "https://el-estore-4b7a9.firebaseio.com",
-  projectId: "el-estore-4b7a9",
-  storageBucket: "el-estore-4b7a9.appspot.com",
-  messagingSenderId: "412789801335"
-};
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
+import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
+
+export const firebaseConfig = {
+  apiKey: "AIzaSyBBpfZ5-RiG2fGwpWFCSimR2CFtXXnTGJI",
+  authDomain: "el-estor.firebaseapp.com",
+  databaseURL: "https://el-estor.firebaseio.com",
+  projectId: "el-estor",
+  storageBucket: "el-estor.appspot.com",
+  messagingSenderId: "524940257833",
+  appId: "1:524940257833:web:c54ca1c9550dc4c9"
+};
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
-    BrowserModule, 
-    IonicModule.forRoot(), 
-    AppRoutingModule, 
-    HttpClientModule, 
-    IonicStorageModule.forRoot(),
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    HttpClientModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireDatabaseModule,
+    AngularFireDatabaseModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    Camera,
+    BackgroundGeolocation,
     Geolocation,
-    ImagePicker,
-    AngularFireDatabase,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    LaunchNavigator,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    GoogleMaps,
+    AngularFireDatabase
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

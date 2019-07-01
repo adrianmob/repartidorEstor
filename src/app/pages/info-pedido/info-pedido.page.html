@@ -1,25 +1,71 @@
 <ion-header>
-  <ion-toolbar>
-      <ion-buttons slot="start" (click)="cerrarModal()">
-          <ion-button color="secondary">
-            <ion-icon slot="icon-only" name="close"></ion-icon>
+    <ion-toolbar>
+        <ion-buttons slot="start" (click)="cerrarModal()">
+            <ion-button color="secondary">
+              <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+      <ion-title>informacion del Pedido</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content padding>
+
+    <div class="nada" *ngIf="pedido.tipo==''">
+      <h4 class="titulo">No tienes ningun pedido</h4>
+    </div>
+
+    <div class="app" *ngIf="pedido.tipo=='app'">
+        <h3>ORIGEN</h3>
+        <p>Toks</p>
+        <p>Blvd. Villas de Irapuato #1443, Int. A-31</p>
+        
+        <h3>PAQUETE</h3>
+        <p>2 Enchiladas Mayas Toks</p>
+        <p>Total: $360</p>
+        
+        <h3>DESTINO</h3>
+        <p>Jesus Adrian Quiroz Palacios.</p>
+        <p>Paseo de la Fundacion 3314, Villas de Irapuato</p>
+        <P>Envio: $30</P>
+        
+        <h3>Cobrar el cliente $390</h3>
+
+        <ion-button class="cancelar" color="danger" fill="outline" (click)="cancelar()">
+            Cancelar Pedido         
           </ion-button>
-        </ion-buttons>
-    <ion-title>informacion del Pedido</ion-title>
-  </ion-toolbar>
-</ion-header>
+      
+    </div>
 
-<ion-content padding>
+    <div class="dash" *ngIf="pedido.tipo=='dash'">
+        <h3>Origen</h3>
+        <p>{{pedido.nomOri}}</p>
+        <p>{{pedido.dirOri.direccion}}</p>
+        <p>Telefono: {{pedido.telOri}}</p>
+        <p>Referencia: {{pedido.refOri}}</p>
+        
+        <h3>PAQUETE</h3>
+        <p>Comprar {{pedido.compra}}</p>
+        <p>Monto aproximado ${{pedido.monto}}</p>
+        
+        <h3>DESTINO</h3>
+        <p>{{pedido.nomDest}}</p>
+        <p>{{pedido.dirDest.direccion}}</p>
+        <p>Telefono: {{pedido.telDest}}</p>
+        <p>Referencia: {{pedido.refDest}}</p>
+        
+        <p class="instruccion">instrucciones del pedido: {{pedido.instruccion}}</p>
+        <p>Costo de envio ${{pedido.costoEnvio}}</p>
+        <p>{{pedido.km}} KM</p>
+        <p>Quien paga: {{pedido.quienPaga}}</p>
 
-<h3>Cliente</h3>
-<p>Jesus Adrian Quiroz Palacios.</p>
-<p>Paseo de la Fundacion 3314, Villas de Irapuato</p>
+        <ion-button class="cancelar" color="danger" fill="outline" (click)="cancelar()">
+            Cancelar Pedido         
+          </ion-button>
+      
+    </div>
+  
+  
 
-<h3>Productos</h3>
-<p>2 Enchiladas Mayas Toks</p>
-<p>Total $360</p>
-
-<h3>Negocio</h3>
-<p>Toks</p>
-<p>Blvd. Villas de Irapuato #1443, Int. A-31</p>
-</ion-content>
+  </ion-content>
+  

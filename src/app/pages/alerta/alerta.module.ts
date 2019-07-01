@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import { IonicModule } from '@ionic/angular';
 
 import { AlertaPage } from './alerta.page';
@@ -11,6 +12,8 @@ import { AlertaPage } from './alerta.page';
     FormsModule,
     IonicModule
     ],
-  declarations: [AlertaPage]
+    exports: [ AlertaPage ],
+  declarations: [AlertaPage],
+  entryComponents: [AlertaPage]
 })
 export class AlertaPageModule {}

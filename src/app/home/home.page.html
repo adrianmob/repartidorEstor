@@ -1,0 +1,28 @@
+<ion-content>
+   <div #map id="mapa"></div>
+   <ion-button class="menu" mode="md" color="light" (click)="toggleSideMenu()">
+      <ion-icon class="center-icono" slot="icon-only" mode="md" name="menu"></ion-icon>
+    </ion-button> 
+    <ion-button class="sos" mode="md" color="light" (click)="toggleSideMenu()">
+      S.O.S.
+    </ion-button> 
+   <ion-button class="center" mode="md" color="light" (click)="centrar()">
+    <ion-icon class="center-icono" slot="icon-only" mode="md" name="locate"></ion-icon>
+  </ion-button> 
+  <ion-button class="center left" mode="md" color="light" (click)="launch()">
+    <ion-icon class="center-icono" slot="icon-only" mode="md" name="navigate"></ion-icon>
+  </ion-button> 
+
+
+  <div class="footer" (click)="infoPedido()">
+      <h2 *ngIf="estado==1 && rumboCliente==false" class="negocio">{{pedido.nomOri}}</h2>
+      <p class="negDir" *ngIf="estado==1 && rumboCliente==false">{{pedido.dirOri.direccion}}</p>
+      <h2 *ngIf="estado==2 && rumboCliente==false" class="negocio">{{pedido.nomDest}}</h2>
+      <p class="negDir" *ngIf="estado==2 && rumboCliente==false">{{pedido.dirDest.direccion}}</p>   
+      <ion-button (click)="directionCliente()" *ngIf="estado==1 && rumboCliente==true" class="botonRecibi" shape="round">Recibi el pedido</ion-button>
+      <ion-button (click)="finalizarPedido()" *ngIf="estado==2 && rumboCliente==true" class="botonRecibi" shape="round">Deje el pedido</ion-button>
+      <ion-button color="ligth" mode="md" class="info">
+        <ion-icon class="icono-info" mode="ios" slot="icon-only" name="list"></ion-icon>
+      </ion-button>  
+  </div>
+</ion-content>

@@ -7,41 +7,56 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-advanced-http": {
-      "PACKAGE_NAME": "com.diegocendejas.app0001"
-    },
-    "cordova-plugin-camera": {
-      "PACKAGE_NAME": "com.diegocendejas.app0001"
-    },
     "cordova-plugin-device": {
-      "PACKAGE_NAME": "com.diegocendejas.app0001"
+      "PACKAGE_NAME": "io.ionic.starter"
     },
-    "cordova-plugin-geolocation": {
-      "PACKAGE_NAME": "com.diegocendejas.app0001"
+    "cordova-plugin-googlemaps": {
+      "PLAY_SERVICES_VERSION": "15.0.1",
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "io.ionic.starter"
     },
     "cordova-plugin-ionic-keyboard": {
-      "PACKAGE_NAME": "com.diegocendejas.app0001"
+      "PACKAGE_NAME": "io.ionic.starter"
     },
     "cordova-plugin-ionic-webview": {
       "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+",
-      "PACKAGE_NAME": "com.diegocendejas.app0001"
+      "PACKAGE_NAME": "io.ionic.starter"
     },
     "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "com.diegocendejas.app0001"
+      "PACKAGE_NAME": "io.ionic.starter"
     },
     "cordova-plugin-statusbar": {
-      "PACKAGE_NAME": "com.diegocendejas.app0001"
-    },
-    "cordova-plugin-telerik-imagepicker": {
-      "PACKAGE_NAME": "com.diegocendejas.app0001"
+      "PACKAGE_NAME": "io.ionic.starter"
     },
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.diegocendejas.app0001"
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
+    "cordova-plugin-mauron85-background-geolocation": {
+      "GOOGLE_PLAY_SERVICES_VERSION": "11+",
+      "ANDROID_SUPPORT_LIBRARY_VERSION": "26+",
+      "ICON": "@mipmap/icon",
+      "SMALL_ICON": "@mipmap/icon",
+      "ACCOUNT_NAME": "@string/app_name",
+      "ACCOUNT_LABEL": "@string/app_name",
+      "ACCOUNT_TYPE": "$PACKAGE_NAME.account",
+      "CONTENT_AUTHORITY": "$PACKAGE_NAME",
+      "PACKAGE_NAME": "io.ionic.repartidorEstor"
+    },
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "io.ionic.repartidorEstor"
+    },
+    "uk.co.workingedge.phonegap.plugin.launchnavigator": {
+      "GOOGLE_API_KEY_FOR_ANDROID": "AIzaSyAFp-V89r2lYDTrvFf0wfEb0qT5ceJ76NM",
+      "OKHTTP_VERSION": "3.12.0",
+      "PACKAGE_NAME": "io.ionic.repartidorEstor"
     }
   },
   "dependent_plugins": {
-    "cordova-plugin-file": {
-      "PACKAGE_NAME": "com.diegocendejas.app0001"
+    "cordova-plugin-actionsheet": {
+      "PACKAGE_NAME": "io.ionic.repartidorEstor"
+    },
+    "cordova-plugin-dialogs": {
+      "PACKAGE_NAME": "io.ionic.repartidorEstor"
     }
   }
 }

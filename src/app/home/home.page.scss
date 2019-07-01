@@ -1,0 +1,98 @@
+#mapa{
+  height: 90%;
+  width: 100%;
+}
+
+#icon{
+  margin-top: 5vw;
+  margin-left: 5vw;
+}
+
+.disabled{
+  color:gray;
+  pointer-events: none;
+}
+
+.menu{
+  top: 1%;
+  bottom: 0;
+  position: absolute;
+  left: 1%;
+  --border-radius: 50%;
+  width: 65px;
+  height: 65px;
+}
+
+.sos{
+  top: 1%;
+  bottom: 0;
+  position: absolute;
+  right: 1%;
+  --border-radius: 50%;
+  width: 65px;
+  height: 65px;
+}
+
+.center{
+  position: absolute;
+  bottom: 10%;
+  right: 2%;
+  --border-radius: 50%;
+  width: 65px;
+  height: 65px;
+}
+
+.left{
+  right: 0;
+  left: 2%;
+}
+
+.center-icono{
+  width: 35px;
+  height: 35px;
+}
+
+.footer{
+  position: absolute;
+  bottom: 0;
+  background-color: white;
+  width: 100%;
+  height: 10%;
+  padding: 10px 55px 0 10px;
+}
+
+.botonRecibi{
+  margin: 0 auto;
+  width: 80%;
+  display: block;
+  margin-top: 3%;
+}
+
+.info{
+  margin: 0 auto;
+  color: black;
+  position: absolute;
+  right: 3%;
+  --box-shadow: none;
+  --padding-start: 0;
+  --padding-end: 0;
+  top: 26px;
+}
+
+.icono-info{
+  width: 38px;
+  height: 38px;
+}
+
+.negocio{
+  margin: 0;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.negDir{
+  text-align: center;
+  font-size: .8rem;
+}
+
+
