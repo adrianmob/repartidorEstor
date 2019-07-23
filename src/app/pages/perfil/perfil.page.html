@@ -1,0 +1,31 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="home"></ion-back-button>
+      </ion-buttons>
+      <ion-title>Perfil</ion-title>
+    </ion-toolbar>
+  </ion-header>
+<ion-content>
+
+    <div class="perfil">
+    <img class='fotoPerfil' id='perfil' [src]="fotografia" alt="Foto de perfil">
+    <div class="camara">
+      <ion-button class="botonCamara" (click)='presentActionSheet()'>
+        <ion-icon class="botonIcono" slot="icon-only" name='camera'></ion-icon>
+      </ion-button>
+    </div>
+  </div>
+
+  <div class="informacion">
+      <ion-input disabled  class="input" [(ngModel)]='usuario.nombre' placeholder="Nombre (s)" type='text'></ion-input>
+      <ion-input disabled  class="input" [(ngModel)]='usuario.apellidoPaterno' placeholder="Apellido Paterno" type='text'></ion-input>
+      <ion-input disabled  class="input" [(ngModel)]='usuario.apellidoMaterno' placeholder="Apellido Materno" type='text'></ion-input>
+      <ion-input disabled  class="input" [(ngModel)]='usuario.email' placeholder="Correo" type='email'></ion-input>
+      <ion-input disabled class="input" [(ngModel)]='usuario.contacto1' placeholder="Número Telefónico" type='phone'></ion-input>
+  </div>
+
+  <ion-button size='default' expand="full" class="actualizar" (click)='actualizar()'>Guardar Cambios</ion-button>
+
+
+</ion-content>

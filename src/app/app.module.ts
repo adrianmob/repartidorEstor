@@ -22,6 +22,9 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 import { LaunchNavigator } from '@ionic-native/launch-navigator/ngx';
 
+import { Camera } from '@ionic-native/camera/ngx';
+
+
 export const firebaseConfig = {
   apiKey: "AIzaSyBBpfZ5-RiG2fGwpWFCSimR2CFtXXnTGJI",
   authDomain: "el-estor.firebaseapp.com",
@@ -51,6 +54,7 @@ export const firebaseConfig = {
     LaunchNavigator,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     GoogleMaps,
+    Camera,
     AngularFireDatabase
   ],
   bootstrap: [AppComponent]

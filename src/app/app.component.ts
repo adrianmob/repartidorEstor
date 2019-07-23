@@ -16,14 +16,13 @@ import { FuncionesGlobalesService } from './services/global/funciones-globales.s
 export class AppComponent {
   public appPages = [
     {
-      title: 'Home',
-      url: '/home',
-      icon: 'home'
+      title: 'Perfil',
+      url: '/perfil',
+      icon: 'contact'
     },
     {
-      title: 'List',
-      url: '/list',
-      icon: 'list'
+      title: 'Salir',
+      icon: 'close'
     }
   ];
 

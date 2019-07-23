@@ -49,6 +49,10 @@
       "GOOGLE_API_KEY_FOR_ANDROID": "AIzaSyAFp-V89r2lYDTrvFf0wfEb0qT5ceJ76NM",
       "OKHTTP_VERSION": "3.12.0",
       "PACKAGE_NAME": "io.ionic.repartidorEstor"
+    },
+    "cordova-plugin-camera": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "io.ionic.repartidorEstor"
     }
   },
   "dependent_plugins": {

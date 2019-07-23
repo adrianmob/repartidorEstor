@@ -151,7 +151,7 @@ export class HomePage {
 
   listenPedidos(){
     this.pedidosSuscribe =  this.afdb.object("pedidos/"+this.id).snapshotChanges().subscribe(data=>{
-      this.pedido = data.payload.val();
+      this.pedido = {...data.payload.val(),key: data.key};
       if(this.pedido){
         if(this.pedido['status'] == 1){
           this.newPedido();
@@ -172,13 +172,16 @@ export class HomePage {
 
     let aceptado = await modal.onDidDismiss();
     if(aceptado.data){
+      this.afdb.database.ref("pedidos/"+this.id).update({
+        status: 2
+      });
       console.log(this.pedido);
       if(this.pedido['tipo'] == "dash"){
         this.marketPosition.lat = this.pedido.dirOri.lat;
         this.marketPosition.lng = this.pedido.dirOri.lng;
   
         this.clientPosition.lat = this.pedido.dirDest.lat;
-        this.clientPosition.lng = this.pedido.dirDest.lat;
+        this.clientPosition.lng = this.pedido.dirDest.lng;
       }
       else{
         this.marketPosition.lat = parseFloat(this.pedido.productos[0].latitud);
@@ -251,6 +254,7 @@ export class HomePage {
     
     this.estado = 2;
 
+
       this.mpCliente = this.map.addMarkerSync({
         icon: '#000000',
         animation: GoogleMapsAnimation.BOUNCE,
@@ -322,6 +326,7 @@ export class HomePage {
   }
 
   finalizarPedido(){
+    this.ruta.remove();
     this.estado = 0;
     this.rumboCliente = false; 
     this.listenPedidos();

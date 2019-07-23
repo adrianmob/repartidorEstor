@@ -36,6 +36,9 @@
     },
     "uk.co.workingedge.phonegap.plugin.launchnavigator": {
       "PACKAGE_NAME": "io.ionic.repartidorEstor"
+    },
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "io.ionic.repartidorEstor"
     }
   },
   "dependent_plugins": {}

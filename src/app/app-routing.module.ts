@@ -18,7 +18,8 @@ const routes: Routes = [
   { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' },
   { path: 'session', loadChildren: './pages/session/session.module#SessionPageModule' },
   { path: 'alerta', loadChildren: './pages/alerta/alerta.module#AlertaPageModule' },
-  { path: 'info-pedido', loadChildren: './pages/info-pedido/info-pedido.module#InfoPedidoPageModule' }
+  { path: 'info-pedido', loadChildren: './pages/info-pedido/info-pedido.module#InfoPedidoPageModule' },
+  { path: 'perfil', loadChildren: './pages/perfil/perfil.module#PerfilPageModule' }
 ];
 
 @NgModule({

@@ -50,7 +50,7 @@ export class UserService {
   updateUserData(user: user) {
     let params = JSON.stringify(user);
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.put(this.URL + 'user/changeUserData', params, { headers: headers });
+    return this.http.post(this.URL + 'actualizar.php', params, { headers: headers });
   }
 
   //establece un valor en la BD que indica si solicitó o no una alerta

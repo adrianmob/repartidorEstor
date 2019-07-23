@@ -14,14 +14,16 @@
   </ion-button> 
 
 
-  <div class="footer" (click)="infoPedido()">
-      <h2 *ngIf="estado==1 && rumboCliente==false" class="negocio">{{pedido.nomOri}}</h2>
-      <p class="negDir" *ngIf="estado==1 && rumboCliente==false">{{pedido.dirOri.direccion}}</p>
-      <h2 *ngIf="estado==2 && rumboCliente==false" class="negocio">{{pedido.nomDest}}</h2>
-      <p class="negDir" *ngIf="estado==2 && rumboCliente==false">{{pedido.dirDest.direccion}}</p>   
+  <div class="footer" >
+    <div class="texto" *ngIf="rumboCliente == false" (click)="infoPedido()">
+      <h2 *ngIf="estado==1" class="negocio">{{pedido.nomOri}}</h2>
+      <p class="negDir" *ngIf="estado==1">{{pedido.dirOri.direccion}}</p>
+      <h2 *ngIf="estado==2" class="negocio">{{pedido.nomDest}}</h2>
+      <p class="negDir" *ngIf="estado==2">{{pedido.dirDest.direccion}}</p>   
+    </div>
       <ion-button (click)="directionCliente()" *ngIf="estado==1 && rumboCliente==true" class="botonRecibi" shape="round">Recibi el pedido</ion-button>
       <ion-button (click)="finalizarPedido()" *ngIf="estado==2 && rumboCliente==true" class="botonRecibi" shape="round">Deje el pedido</ion-button>
-      <ion-button color="ligth" mode="md" class="info">
+      <ion-button color="ligth" mode="md" class="info" (click)="infoPedido()">
         <ion-icon class="icono-info" mode="ios" slot="icon-only" name="list"></ion-icon>
       </ion-button>  
   </div>

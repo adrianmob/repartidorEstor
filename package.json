@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^7.2.2",
     "@angular/router": "^7.2.2",
     "@ionic-native/background-geolocation": "^5.8.0",
+    "@ionic-native/camera": "^5.10.0",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/geolocation": "^5.8.0",
     "@ionic-native/google-maps": "^5.0.0-beta.27",
@@ -34,6 +35,7 @@
     "cordova-browser": "5.0.4",
     "cordova-ios": "^5.0.0",
     "cordova-plugin-actionsheet": "2.3.3",
+    "cordova-plugin-camera": "^4.1.0",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-dialogs": "2.0.1",
     "cordova-plugin-geolocation": "4.0.1",
@@ -105,6 +107,9 @@
         "GOOGLE_API_KEY_FOR_ANDROID": "AIzaSyAFp-V89r2lYDTrvFf0wfEb0qT5ceJ76NM",
         "OKHTTP_VERSION": "3.12.0",
         "LOCATION_USAGE_DESCRIPTION": "This app requires access to your location for navigation purposes"
+      },
+      "cordova-plugin-camera": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
       }
     },
     "platforms": [
